@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: stg_subscriptions
+    description: "Initial subscription data cleanup. Corrects inverted dates."
+    columns:
+      - name: subscription_id
+        description: "Unique identifier for the subscription."
+        tests:
+          - unique
+          - not_null
+      - name: start_date
+        description: "Corrected start date (always less than or equal to the end_date)."
+      - name: subscription_status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['active', 'expired']
+
+  - name: int_revenue_by_month
+    description: "Intermediate table that expands subscriptions into a monthly series (date spine)."
+    columns:
+      - name: account_id
+        description: "Account ID."
+      - name: month_end
+        description: "Last day of the evaluated month."
+      - name: total_arr
+        description: "Sum of ARR for all active subscriptions in that month."
+
+  - name: fct_mrr_movements
+    description: "Final fact table. Calculates month-over-month MRR movements (New, Churn, Upgrade, etc.)."
+    columns:
+      - name: account_id
+        tests:
+          - not_null
+      - name: month_end
+        tests:
+          - not_null
+      - name: change_category
+        description: "Classification of the ARR movement."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['New', 'Churn', 'Reactivation', 'Upgrade', 'Downgrade', 'No-change']
+      - name: total_arr
+        description: "Total ARR at the end of the month."
+        tests:
+          - not_null

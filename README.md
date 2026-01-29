@@ -1,7 +1,7 @@
 # Subscription Revenue Modeling (dbt)
 
 This project models Monthly Recurring Revenue (ARR) based on subscription data, handling upgrades, downgrades, churn, and reactivations.
-
+<img width="1200" height="600" alt="arr_chart" src="https://github.com/user-attachments/assets/8322298a-5383-4165-af89-68483cfd950a" />
 ## Overview
 - **Stack:** dbt Core, PostgreSQL, Python.
 - **Key Features:**
